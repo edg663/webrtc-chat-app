@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>内部通讯</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f2f5; }
+        #app-container { display: flex; flex-direction: column; width: 90%; max-width: 450px; height: 90vh; max-height: 700px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .hidden { display: none !important; }
+        #connection-ui, #session-ui { padding: 20px; text-align: center; border-bottom: 1px solid #eee; }
+        button { font-size: 16px; padding: 10px 20px; margin: 5px; cursor: pointer; border-radius: 5px; border: none; color: white; transition: background-color 0.3s; }
+        #connect-button, #voice-call-button { background-color: #28a745; }
+        #end-session-button { background-color: #dc3545; }
+        #mute-button { background-color: #6c757d; }
+        input[type="text"] { width: calc(100% - 22px); padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; }
+        #call-timer { margin-top: 10px; font-size: 1.1em; color: #555; }
+
+        /* --- 聊天区域样式 --- */
+        #chat-container { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
+        #messages { list-style-type: none; margin: 0; padding: 15px; flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column;}
+        #messages li { padding: 8px 12px; margin-bottom: 10px; border-radius: 18px; max-width: 80%; word-wrap: break-word; }
+        #messages li.me { background-color: #007bff; color: white; align-self: flex-end; margin-left: auto;}
+        #messages li.other { background-color: #e9e9eb; color: #333; align-self: flex-start; }
+        #chat-form { display: flex; padding: 10px; border-top: 1px solid #eee; }
+        #chat-input { border: 1px solid #ddd; padding: 10px; flex-grow: 1; border-radius: 20px; margin-right: 10px; }
+        /* [重要修改] 为发送按钮设置明确的颜色 */
+        #chat-form button { background-color: #007bff; }
+    </style>
+</head>
+<body>
+    <div id="app-container">
+        <div id="connection-ui">
+            <h1>内部通讯</h1>
+            <p>你的ID: <strong id="my-id">...</strong></p>
+            <input type="text" id="peer-id-input" placeholder="输入对方ID开始会话">
+            <button id="connect-button">💬 连接</button>
+        </div>
+        <div id="session-ui" class="hidden">
+             <p>正在与 <strong id="peer-id-display">...</strong> 会话中</p>
+             <div id="call-timer" class="hidden">通话时长: <span id="timer-display">00:00</span></div>
+             <div>
+                <button id="voice-call-button">📞 语音通话</button>
+                <button id="mute-button" class="hidden">🎤 静音</button>
+                <button id="end-session-button">❌ 结束会话</button>
+             </div>
+        </div>
+        <div id="chat-container" class="hidden">
+            <ul id="messages"></ul>
+            <form id="chat-form" action="">
+                <input id="chat-input" autocomplete="off" placeholder="输入消息..." /><button type="submit">发送</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
